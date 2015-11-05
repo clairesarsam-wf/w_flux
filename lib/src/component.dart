@@ -17,13 +17,14 @@ library w_flux.component;
 import 'dart:async';
 
 import 'package:react/react.dart' as react;
+import 'package:web_skin_dart/ui_core.dart';
 
 import './store.dart';
 
 /// FluxComponents are responsible for rendering application views and turning
 /// user interactions and events into [Action]s. FluxComponents can use data
 /// from one or many [Store] instances to define the resulting component.
-abstract class FluxComponent<ActionsT, StoresT> extends react.Component {
+abstract class FluxComponent<T extends ComponentDefinition, ActionsT, StoresT> extends react.Component with TypedPropsGetter<T> {
   /// The class instance defined by [ActionsT] that holds all [Action]s that
   /// this component needs access to.
   ///
@@ -115,5 +116,22 @@ abstract class FluxComponent<ActionsT, StoresT> extends react.Component {
   /// [componentWillUnmount].
   void addSubscription(StreamSubscription subscription) {
     _subscriptions.add(subscription);
+  }
+
+  /// Utility function used for prop transfer
+  Map copyProps({bool omitReservedReactProps: true, Iterable keysToOmit, Iterable<Iterable> keySetsToOmit}) {
+    return getPropsToForward(this.props,
+        omitReactProps: omitReservedReactProps,
+        keysToOmit: keysToOmit,
+        keySetsToOmit: keySetsToOmit
+    );
+  }
+
+  /// Returns a new ClassNameBuilder with className and blacklist values added from [CssClassProps.className] and
+  /// [CssClassProps.classNameBlackList], if they are specified.
+  ///
+  /// This method should be used as the basis for the classNames of components receiving forwarded props.
+  ClassNameBuilder forwardingClassNameBuilder() {
+    return new ClassNameBuilder.fromProps(props);
   }
 }

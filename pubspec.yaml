@@ -11,6 +11,10 @@ authors:
 homepage: https://github.com/Workiva/w_flux
 dependencies:
   react: ">=0.5.0 <0.9.0"
+  web_skin_dart:
+    git:
+      url: git@github.com:Workiva/web_skin_dart.git
+      ref: 0.0.9
 dev_dependencies:
   coverage: "^0.7.2"
   dart_dev: "^1.0.0"
